@@ -1,0 +1,140 @@
+:root {
+    --primary: #00d2ff;
+    --secondary: #3a7bd5;
+    --bg: #0f0c29;
+    --glass: rgba(255, 255, 255, 0.1);
+    --input-bg: rgba(0, 0, 0, 0.4);
+}
+
+body {
+    background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+    color: white;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 850px;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.5);
+}
+
+header h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header span { color: var(--primary); }
+
+nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+nav button {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.active-nav { background: var(--primary) !important; font-weight: bold; }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+input, select {
+    background: var(--input-bg);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #ffffff !important; /* Force white text */
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Fix for Dropdown visibility */
+select option {
+    background-color: #1a1a2e;
+    color: white;
+}
+
+.predict-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.predict-btn:active { transform: scale(0.98); }
+
+.prob-bar-container {
+    height: 25px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    margin-top: 30px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.prob-bar {
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(to right, #00d2ff, #3a7bd5);
+    transition: width 0.8s ease-in-out;
+}
+
+.prob-text {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Leaderboard Table */
+.leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.leaderboard td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}

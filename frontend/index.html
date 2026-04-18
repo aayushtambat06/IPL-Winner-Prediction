@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL 2026 Predictor AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IPL 2026 <span>Predictor AI</span></h1>
+            <nav>
+                <button onclick="showTab('chase')" id="btn-chase" class="active-nav">Live Predictor</button>
+                <button onclick="showTab('tournament')" id="btn-tour">Tournament Win %</button>
+            </nav>
+        </header>
+
+        <section id="tab-chase" class="tab-content">
+            <div class="grid">
+                <div class="input-group">
+                    <label>Batting Team</label>
+                    <select id="batting_team">
+                        <option value="Mumbai Indians">Mumbai Indians</option>
+                        <option value="Chennai Super Kings">Chennai Super Kings</option>
+                        <option value="Royal Challengers Bengaluru">RCB</option>
+                        <option value="Kolkata Knight Riders">KKR</option>
+                        <option value="Rajasthan Royals">Rajasthan Royals</option>
+                        <option value="Gujarat Titans">Gujarat Titans</option>
+                        <option value="Lucknow Super Giants">LSG</option>
+                        <option value="Sunrisers Hyderabad">SRH</option>
+                        <option value="Delhi Capitals">Delhi Capitals</option>
+                        <option value="Punjab Kings">Punjab Kings</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Bowling Team</label>
+                    <select id="bowling_team">
+                        <option value="Chennai Super Kings">Chennai Super Kings</option>
+                        <option value="Mumbai Indians">Mumbai Indians</option>
+                        <option value="Royal Challengers Bengaluru">RCB</option>
+                        <option value="Kolkata Knight Riders">KKR</option>
+                        <option value="Rajasthan Royals">Rajasthan Royals</option>
+                        <option value="Gujarat Titans">Gujarat Titans</option>
+                        <option value="Lucknow Super Giants">LSG</option>
+                        <option value="Sunrisers Hyderabad">SRH</option>
+                        <option value="Delhi Capitals">Delhi Capitals</option>
+                        <option value="Punjab Kings">Punjab Kings</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Host City</label>
+                    <select id="city">
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Bengaluru">Bengaluru</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Lucknow">Lucknow</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Target Score</label>
+                    <input type="number" id="target" value="180">
+                </div>
+
+                <div class="input-group">
+                    <label>Runs Left</label>
+                    <input type="number" id="runs_left" value="50">
+                </div>
+
+                <div class="input-group">
+                    <label>Balls Left</label>
+                    <input type="number" id="balls_left" value="30">
+                </div>
+
+                <div class="input-group">
+                    <label>Wickets Down</label>
+                    <input type="number" id="wickets" value="3" max="10">
+                </div>
+            </div>
+
+            <button class="predict-btn" onclick="predictChase()">Calculate Probabilities</button>
+
+            <div class="result-box">
+                <div class="prob-bar-container">
+                    <div id="prob-bar" class="prob-bar"></div>
+                </div>
+                <div class="prob-text">
+                    <span id="team1-text">Batting: 50%</span>
+                    <span id="team2-text">Bowling: 50%</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-tournament" class="tab-content" style="display:none">
+            <button class="predict-btn" onclick="simulateTournament()">Run 1,000 Simulations</button>
+            <div id="tournament-loader" style="display:none; text-align:center; margin:20px;">
+                <div class="spinner"></div> Simulating seasons...
+            </div>
+            <div id="tournament-list" class="leaderboard"></div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
