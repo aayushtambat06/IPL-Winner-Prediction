@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPL 2026 Predictor AI</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
 </head>
 <body>
     <div class="container">
@@ -97,6 +99,9 @@
                     <span id="team1-text">Batting: 50%</span>
                     <span id="team2-text">Bowling: 50%</span>
                 </div>
+                <div style="position: relative; height:250px; width:100%; margin-top:20px; display:flex; justify-content:center;">
+                <canvas id="liveChart"></canvas>
+                </div>
             </div>
         </section>
 
@@ -105,6 +110,9 @@
             <div id="tournament-loader" style="display:none; text-align:center; margin:20px;">
                 <div class="spinner"></div> Simulating seasons...
             </div>
+            <div style="position: relative; height:300px; width:100%; margin-top:20px; margin-bottom:20px;">
+    <canvas id="tournamentChart"></canvas>
+</div>
             <div id="tournament-list" class="leaderboard"></div>
         </section>
     </div>

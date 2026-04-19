@@ -1,13 +1,13 @@
 const API_URL = "http://127.0.0.1:5000";
 
+// Chart instances
+let liveChart = null;
+let tourneyChart = null;
+
 // --- Tab Switching Logic ---
 function showTab(tab) {
-    // Hide all contents
     document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
-    // Remove active class from all nav buttons
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-nav'));
-    
-    // Show selected content and highlight button
     document.getElementById('tab-' + tab).style.display = 'block';
     if(tab === 'chase') {
         document.getElementById('btn-chase').classList.add('active-nav');
@@ -28,9 +28,8 @@ async function predictChase() {
         wickets: parseInt(document.getElementById('wickets').value)
     };
 
-    // Simple validation
     if (isNaN(data.target) || isNaN(data.runs_left) || isNaN(data.balls_left)) {
-        alert("Please enter valid numbers for the match details.");
+        alert("Please enter valid numbers.");
         return;
     }
 
@@ -42,21 +41,18 @@ async function predictChase() {
         });
 
         const result = await response.json();
-        
-        if (result.error) {
-            alert("Error: " + result.error);
-            return;
-        }
+        if (result.error) return alert("Error: " + result.error);
 
-        // Update UI Visuals
-        const bar = document.getElementById('prob-bar');
-        bar.style.width = result.batting_team_prob + "%";
-        
+        // Update UI Text & Bar
+        document.getElementById('prob-bar').style.width = result.batting_team_prob + "%";
         document.getElementById('team1-text').innerText = `Batting: ${result.batting_team_prob}%`;
         document.getElementById('team2-text').innerText = `Bowling: ${result.bowling_team_prob}%`;
+
+        // UPDATE CHART
+        renderLiveChart(data.batting_team, result.batting_team_prob, data.bowling_team, result.bowling_team_prob);
+
     } catch (error) {
-        console.error("Connection Error:", error);
-        alert("Could not connect to the Python server. Make sure app.py is running!");
+        alert("Could not connect to the server.");
     }
 }
 
@@ -64,38 +60,88 @@ async function predictChase() {
 async function simulateTournament() {
     const loader = document.getElementById('tournament-loader');
     const list = document.getElementById('tournament-list');
-    
-    // Reset UI
     loader.style.display = 'block';
     list.innerHTML = "";
 
     try {
         const response = await fetch(`${API_URL}/simulate-tournament`);
         const data = await response.json();
-        
-        if (data.error) {
-            alert("Error: " + data.error);
-            loader.style.display = 'none';
-            return;
-        }
+        if (data.error) return alert("Error: " + data.error);
 
-        let html = "<table>";
-        html += "<tr><th style='text-align:left; padding:10px;'>Team</th><th style='text-align:right; padding:10px;'>Win Probability</th></tr>";
-        
+        // Build Table
+        let html = "<table><tr><th style='text-align:left;'>Team</th><th style='text-align:right;'>Win Probability</th></tr>";
+        let teams = [];
+        let probabilities = [];
+
         for (let team in data) {
-            html += `
-                <tr>
-                    <td style="padding:10px;">${team}</td>
-                    <td style="text-align:right; padding:10px; color:#00d2ff; font-weight:bold;">${data[team]}%</td>
-                </tr>`;
+            html += `<tr><td>${team}</td><td style="text-align:right; color:#00d2ff; font-weight:bold;">${data[team]}%</td></tr>`;
+            teams.push(team);
+            probabilities.push(data[team]);
         }
         html += "</table>";
-        
         list.innerHTML = html;
+
+        // UPDATE CHART
+        renderTourneyChart(teams, probabilities);
+
     } catch (error) {
-        console.error("Connection Error:", error);
-        alert("Simulation failed. Check if the server is running.");
+        alert("Simulation failed.");
     } finally {
         loader.style.display = 'none';
     }
+}
+
+// --- CHART.JS RENDERING FUNCTIONS ---
+function renderLiveChart(batTeam, batProb, bowlTeam, bowlProb) {
+    const ctx = document.getElementById('liveChart').getContext('2d');
+    if (liveChart) liveChart.destroy(); // Destroy old chart to prevent overlap
+
+    liveChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [batTeam, bowlTeam],
+            datasets: [{
+                data: [batProb, bowlProb],
+                backgroundColor: ['#00d2ff', '#ff007f'], // Neon Blue and Neon Pink
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: 'white' } }
+            }
+        }
+    });
+}
+
+function renderTourneyChart(teams, probabilities) {
+    const ctx = document.getElementById('tournamentChart').getContext('2d');
+    if (tourneyChart) tourneyChart.destroy();
+
+    tourneyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: teams,
+            datasets: [{
+                label: 'Championship Win Probability (%)',
+                data: probabilities,
+                backgroundColor: '#00d2ff',
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                x: { ticks: { color: 'white', display: false }, grid: { display: false } } // Hidden X labels for clean look
+            },
+            plugins: {
+                legend: { labels: { color: 'white' } }
+            }
+        }
+    });
 }
